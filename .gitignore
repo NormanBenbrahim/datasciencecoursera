@@ -12,6 +12,7 @@ course_content/rprogramming/specdata
 ehthumbs.db
 Thumbs.db
 *.pyc
+.Rhistory
 
 # Packages #
 ############

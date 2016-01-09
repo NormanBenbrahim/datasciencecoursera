@@ -53,7 +53,7 @@ lines(DateTime, Sub_metering_2, col="red")
 lines(DateTime, Sub_metering_3, col="blue")
 legend("topright",
 	   col=c("black", "red", "blue"),
-	   names(data_subset)[7:10],
+	   colnames(data_subset)[7:9],
 	   lwd=1)
 
 # close connection

@@ -38,15 +38,15 @@ rownames(data_subset) <- 1:nrow(data_subset) # re-number the rows
 attach(data_subset)
 
 # create the png file 
-png(filename = "plot2.png", 
-    width = 480, height = 480, 
-    units = "px", bg = "transparent")
+png(filename="plot2.png", 
+    width=480, height=480, 
+    units="px", bg="transparent")
 
 # plot the result with labels
 plot(DateTime, Global_active_power, 
-     type = "l",
-     xlab = "",
-     ylab = "Global Active Power (kilowatts)")
+     type="l",
+     xlab="",
+     ylab="Global Active Power (kilowatts)")
 
 # close the connection
 dev.off()

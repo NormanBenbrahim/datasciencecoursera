@@ -1,0 +1,37 @@
+# R Programming Assignment 3
+
+These are my solutions to the third programming assignment of Coursera's R Programming Course. The instructions for this assignment can be found in the file "instructions.pdf" of this repo.
+
+## 1. Plot the 30-day mortality rates for heart attack
+
+```{r}
+# name of files
+fname_outcome <- "rprog-data-ProgAssignment3-data/outcome-of-care-measures.csv"
+fname_hospital <- "rprog-data-ProgAssignment3-data/hospital-data.csv"
+
+# loading outcomes
+outcome <- read.csv(fname_outcome, colClasses="character")
+
+# head() creates too much info, so let's use other tools
+# print number of columns
+ncol(outcome)
+
+# print the name of the columns
+names(outcome)
+```
+
+As you can see, there's a shitload of information in this file. Let's plot the 30 day death rates from heart attack (column 11). We need to coerce this as a numeric before doing so.
+
+```{r}
+outcome[, 11] <- as.numeric(outcome[, 11])
+hist(outcome[, 11], col="red", breaks = 25, 
+     main = "30-Day Mortality Rates From Heart Attack",
+     xlab = "Mortality Rates",
+     ylab = "Frequency")
+rug(outcome[, 11])
+abline(v = mean(outcome[, 11], na.rm=T), lwd=2, col="green")
+```
+
+## 2. Finding the best hospital in a state
+
+

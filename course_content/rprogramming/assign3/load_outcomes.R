@@ -1,5 +1,5 @@
 # function to load the outcomes of care file
-load_outcomes <- function() {
+load_outcomes <- function(state, outcome) {
     # read outcome data
     # we need State [2], 30-day heart attack mortality[11], 30-day heart failure
     # mortality [17], 30-day pneumonia mortality [23]

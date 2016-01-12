@@ -1,6 +1,8 @@
 ---
 title: "hdf5"
-output: html_document
+output: 
+  html_document:
+    keep_md: true
 ---
 
 Stands for hierarchical data format. Used for storing large data. First you install the package, this is done with the following commands (not actually run here). Bioconductor is a package installer of sorts. 

@@ -1,4 +1,9 @@
-# R Programming Assignment 3
+---
+title: "R Programming Assignment 3"
+output: 
+  html_document:
+    keep_md: true
+---
 
 These are my solutions to the third programming assignment of Coursera's R Programming Course. The instructions for this assignment can be found in the file "instructions.pdf" of this repo.
 
@@ -109,7 +114,6 @@ Here we have the sample output from a single test call of rank all (it is slow)
 
 ```{r}
 source("rankall.R")
-tail(rankall("pneumonia", "worst"), 3)
 tail(rankall("pneumonia", "worst"), 3)
 ```
 

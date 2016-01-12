@@ -1,0 +1,51 @@
+---
+title: "hdf5"
+output: html_document
+---
+
+Stands for hierarchical data format. Used for storing large data. First you install the package, this is done with the following commands (not actually run here). Bioconductor is a package installer of sorts. 
+
+```{r eval=FALSE}
+source("http://bioconductor.org/biocLite.R")
+biocLite("rhdf5")
+```
+
+Now load it up and create a file. More tutorials on hdf5 can be found at
+`https://www.bioconductor.org/packages/3.3/bioc/vignettes/rhdf5/inst/doc/rhdf5.pdf`
+
+```{r}
+library(rhdf5)
+created <- h5createFile("example.h5")
+created
+```
+
+Next we add groups to the file with the command h5createGroup, and list the table with h5ls. If things already exist it will tell you, which is nice. These warnings come up as a result of compiling the RMD document and re-running the code and stuff.
+
+```{r}
+created <- h5createGroup("example.h5", "foo")
+created <- h5createGroup("example.h5", "baa")
+created <- h5createGroup("example.h5", "foo/foobaa")
+h5ls("example.h5")
+```
+
+We can write data to particular groups, namely we can store large matrices to group instances in "example.h5".
+
+```{r}
+A <- matrix(1:100, nr=50, nc=2)
+h5write(A, "example.h5", "foo/A")
+B = array(seq(0.1, 0.2, by=0.01), dim=c(5,2,2))
+attr(B, "scale") <- "litre"
+h5write(B, "example.h5", "foo/foobaa/B")
+h5ls("example.h5")
+```
+
+To read data is pretty simple, you just call the h5read command
+
+```{r}
+readA <- h5read("example.h5", "foo/A")
+readB <- h5read("example.h5", "foo/foobaa/B")
+head(readA, 15)
+```
+
+If you want to read/write specific chunks (indices) then just use the `index` option of the `h5read` and `h5write` functions. 
+

@@ -1,0 +1,49 @@
+---
+title: "Reading from the web"
+output: html_document
+---
+
+This is where the money is. Be aware that for some websites the terms of service for the website specify that you cannot scrape its data. One example is using google scholar page for Jeff Leek 
+(`https://scholar.google.com/citations?user=HI-I6C0AAAAJ`)
+
+```{r}
+# Parse it with XML which is fairly straightforward
+library(XML)
+url1 <- "https://scholar.google.com/citations?user=HI-I6C0AAAAJ"
+html <- htmlTreeParse(url1, useInternalNodes = T)
+
+# get title
+xpathSApply(html, "//title", xmlValue)
+
+# get the "cited by" section
+xpathSApply(html, "//td[@id='col-citedby']", xmlValue)
+
+```
+
+Weird, I get an empty list... Let's try with the next tool, which is httr 
+
+```{r}
+library(httr); html2 <- GET(url1)
+content2 <- content(html2, as = "text")
+parsed_html <- htmlParse(content2, asText = T)
+xpathSApply(parsed_html, "//title", xmlValue)
+```
+
+That works. Now accessing websites with passwords. Here's an example:
+
+```{r}
+pg1 <- GET("http://httpbin.org/basic-auth/user/passwd")
+pg1
+```
+
+Status is set to 401 which is an error, because you haven't been authenticated. You can authenticate using httr. In this case this is just a test website so the username and password are moot. Usually you need to authenticate using a real username and password.
+
+```{r}
+pg2 <- GET("http://httpbin.org/basic-auth/user/passwd",
+           authenticate("user", "passwd"))
+pg2
+names(pg2)
+```
+
+For more examples of scrapping the web using R go to R Bloggers
+(http://www.r-bloggers.com/search/web%20scraping)

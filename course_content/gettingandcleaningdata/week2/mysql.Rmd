@@ -1,0 +1,73 @@
+---
+title: "Notes for week 2"
+output: 
+  html_document:
+    keep_md: true
+---
+
+I didn't bother making notes for week 1 (a mistake, I should have but whatever). First up is reading from MySQL. We install an R package for doing exactly this:
+
+``` {r, eval=F}
+install.packages("RMySQL")
+```
+
+Next up, we will be using the UCSC database as an example. This is a Genome Bioinformatics database (one of the best apparently). Found at `http://genome.ucsc.edu/goldenPath/help/mysql.html`
+
+```{r}
+library(RMySQL)
+ucscDb <- dbConnect(MySQL(), user="genome", host = "genome-mysql.cse.ucsc.edu")
+result <- dbGetQuery(ucscDb, "show databases;"); dbDisconnect(ucscDb);
+```
+
+This shows all the databases available on this server.
+
+```{r}
+result
+```
+
+**As you can see, there's a shitload**. Now let's do the same thing but connect to a specific database, namely `hg19` which is a particular build of the human genome. T 
+
+```{r}
+hg19 <- dbConnect(MySQL(), user = "genome", db = "hg19",
+                  host = "genome-mysql.cse.ucsc.edu")
+```
+
+The following command lists all the tables contained within the database `hg19`.
+
+```{r}
+allTables <- dbListTables(hg19)
+head(allTables)
+```
+
+Suppose we wanted the dimensions of a specific table. This is equivalent to showing the "data frames" that are within that table. The second argument in the function corresponds to a specific sequence of the genome.
+
+```{r}
+dbListFields(hg19, "affyU133Plus2")
+```
+
+Suppose we wanted to count how many rows in total the data frames. This is done with the following sql command:
+
+```{r}
+dbGetQuery(hg19, "select count(*) from affyU133Plus2")
+```
+
+Suppose you wanted to now get a data frame. You do so with:
+
+```{r}
+affyData <- dbReadTable(hg19, "affyU133Plus2")
+# head(affyData) # huge
+```
+
+As you can see, this table is huge and there are some warnings about coercing data types. Ignore these. One important thing to do when extracting data frames is subsetting, since most tables are gigantic. Don't forget to clear the query and connection!
+
+```{r}
+query <- dbSendQuery(hg19, "select * from affyU133Plus2 where misMatches between 1 and 3")
+affyMis <- fetch(query) 
+affyMis <- fetch(query, n=10) # fetches the first 10 lines
+quantile(affyMis$misMatches)
+dbClearResult(query)
+dim(affyMis)
+dbDisconnect(hg19)
+```
+
+Those are the basics of MySQL

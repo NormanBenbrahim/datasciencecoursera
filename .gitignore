@@ -1,9 +1,11 @@
 # folders #
 ###############
-course_content/rprogramming/assign1/specdata
-course_content/exploratorydataanalysis/week1/assign1/household_power_consumption.txt
-course_content/rprogramming/assign3/rprog-data-ProgAssignment3-data
-course_content/reproducibleresearch/RepData_PeerAssessment1
+rprogramming/assign1/specdata
+rprogramming/assign3/rprog-data-ProgAssignment3-data/hospital-data.csv
+rprogramming/assign3/rprog-data-ProgAssignment3-data/outcome-of-care-measures.csv
+exploratorydataanalysis/week1/assign1/household_power_consumption.txt
+rprogramming/assign3/rprog-data-ProgAssignment3-data
+reproducibleresearch/RepData_PeerAssessment1
 
 # OS generated files #
 ######################
@@ -28,3 +30,4 @@ Thumbs.db
 *.rar
 *.tar
 *.zip
+*.csv

@@ -1,0 +1,35 @@
+---
+title: "Reshaping Data"
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r}
+library(reshape2)
+head(mtcars)
+```
+
+# Melting data frames
+
+Basically it takes a data frame and flips it so it's tall and skinny, based on the id names (`id`) you provide and the variables (`measure.vars()`)
+```{r}
+mtcars$carname <- rownames(mtcars)
+carMelt <- melt(mtcars, id = c("carname", "gear", "cyl"), 
+                        measure.vars = c("mpg", "hp"))
+head(carMelt)
+```
+
+# Casting data frames
+
+We can do this using the `dcast()` function. In this way we can see how certain variables vary by factors. E.g. 
+
+```{r}
+cylData <- dcast(carMelt, cyl ~ variable)
+cylData # basically gives you measure counts
+```
+
+You can also give it a metric to summarize, e.g.
+```{r}
+dcast(carMelt, cyl ~ variable, mean)
+```

@@ -1,0 +1,74 @@
+---
+title: "Summarizing Data"
+output: 
+  html_document:
+    keep_md: true
+---
+
+We'll be using Baltimore city restaurants as an example (a small subset of them).
+
+```{r}
+if (!file.exists("./data")) {
+    dir.create("./data")
+}
+
+if (!file.exists("./data/restaurants.csv")) {
+    fileUrl <- "https://data.baltimorecity.gov/api/views/k5ry-ef3g/rows.csv?accesType=DOWNLOAD"
+    download.file(fileUrl, destfile = "./data/restaurants.csv", method = "curl")
+}
+
+restdata <- read.csv("./data/restaurants.csv")
+str(restdata)
+```
+
+Tabulate conditions in the data frame
+
+```{r}
+table(restdata$zipCode %in% c("21212", "21213"))
+```
+
+Subsetting using the conditioning of specific variables
+
+```{r}
+restdata[restdata$zipCode %in% c("21212", "21213"), ]
+```
+
+that's certainly useful. Another useful thing you can do is cross tabulate. For example, here is the UCB admissions dataset found in base R:
+```{r}
+data("UCBAdmissions")
+df = as.data.frame(UCBAdmissions)
+summary(df)
+```
+
+We can cross tabulate variables to see what the relationship is. In the equation, the left is the variable that is going to be displayed in the table, and the right is the other variable, which may be broken down by some relationship
+
+```{r}
+xtabs(Freq ~ Gender + Admit, data = df)
+```
+
+One fairly useful command is `object.size()`, which gives you the size in bytes of the object in question.
+
+```{r}
+some_data <- rnorm(1e6)
+object.size(some_data)
+
+# in megabytes
+print(object.size(some_data), units = "Mb")
+```
+
+# Creating New Variables
+
+Sometimes you will want to create new variables in your data frame. This is also partly data engineering. One way to do this is creating categorical variables. Here we create categories based on quantiles of the data:
+
+```{r}
+restdata$zipGroups <- cut(restdata$zipCode, breaks = quantile(restdata$zipCode))
+table(restdata$zipGroups)
+```
+
+An easier way to do this is to use the `cut2()` function from the library `Hmisc`.
+
+```{r}
+library(Hmisc)
+restdata$zipGroups <- cut2(restdata$zipCode, g = 4) # set no. of groups
+table(restdata$zipGroups)
+```

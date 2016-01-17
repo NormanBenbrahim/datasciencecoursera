@@ -1,0 +1,54 @@
+---
+title: "Merging Data"
+output: 
+  html_document:
+    keep_md: true
+---
+
+Sometimes when you're bringing datasets into R you want to be able to merge them. Usually you'll want to match them based on an idea. This is the same idea as having a link set of tables in a database like mysql. Example data will be the peer review experiment data (conducted by Jeff Leek)
+
+```{r}
+fileUrl1 <- "https://dl.dropboxusercontent.com/u/7710864/data/reviews-apr29.csv"
+fileUrl2 <- "https://dl.dropboxusercontent.com/u/7710864/data/solutions-apr29.csv"
+
+if (!file.exists("./data/reviews.csv")) {
+    download.file(fileUrl1, destfile = "./data/reviews.csv")
+}
+if (!file.exists("./data/solutions.csv")) {
+    download.file(fileUrl2, destfile = "./data/solutions.csv")
+} 
+
+reviews <- read.csv("./data/reviews.csv")
+solutions <- read.csv("./data/solutions.csv")
+
+str(reviews)
+str(solutions)
+```
+
+By default, the merge function merges by the datasets that have identical column names. So for this example,
+
+```{r}
+names(reviews)
+names(solutions)
+```
+
+It would try to merge by "id", "start", "stop", and "time_left". We can specify how to merge though:
+
+```{r}
+mergedData <- merge(reviews, solutions, by.x = "solution_id", by.y = "id", all = TRUE)
+head(mergedData)
+```
+
+`by.x` refers to the id in the reviews dataframe while the `by.y` refers to the id in the solutions dataframe. `all = TRUE` refers to rows where one value would be missing for one variable, it would replace it with `NA`, naturally. 
+
+You can also do this using the `join()` function of the plyr package, which is faster but less full featured. In particular you can only join things that have the same id name. This could be countered by simply renaming the columns, however I have not tried this (yet).
+
+```{r}
+library(plyr)
+
+# create 2 sample data frames
+df1 <- data.frame(id = sample(1:1e3), x = rnorm(1e3))
+df2 <- data.frame(id = sample(1:1e3), y = rnorm(1e3))
+new_df <- arrange(join(df1, df2), id)
+head(new_df)
+```

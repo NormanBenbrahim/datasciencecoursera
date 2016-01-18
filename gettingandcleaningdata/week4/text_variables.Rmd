@@ -1,0 +1,96 @@
+---
+title: "Editing Text Variables"
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+There will be times where you grab a spreadsheet or other kind of data file containing really ugly text variables. Here, we go through how to clean them up and make them usable through examples. We will use the Baltimore camera data (running red lights lol)
+
+```{r}
+if (!file.exists("./data")){
+    dir.create("./data")
+}
+
+fUrl <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD"
+if (!file.exists("./data/cameras.csv")) {
+    download.file(fUrl, destfile = "./data/cameras.csv", method = "curl")
+}
+
+camera_data <- read.csv("./data/cameras.csv")
+names(camera_data)
+```
+
+One thing we can do is reduce capital letters in strings, use the function `tolower()` to do this. If you wanna make them all upper case you can also use `toupper()`.
+
+```{r}
+tolower(names(camera_data))
+```
+
+To split a string into two based on a value, you can use strsplit. This is similar to `.split()` in python. In the lecture he splits the column name "Location.1" into "Location" "1". I don't know why you would want to do that though... whatever, here's how it's done
+
+```{r}
+splitnames <- strsplit(names(camera_data), "\\.")
+splitnames[[6]]
+```
+
+You can also use `sub()`, but this function applies only once. This means it'll find the first instance of the string to replace, and then stop. E.g.,
+```{r}
+example1 <- "a_string"
+example2 <- "yet_another_string"
+
+sub("_", "", example1)
+sub("_", "", example2)
+```
+
+If you wanna replace multiple instances of a character, use `gsub()`
+
+```{r}
+example3 <- "so_many_under_scores"
+gsub("_", "", example3)
+```
+
+To search for specific values in variable names you can use `grep()` and `grepl()`.
+
+```{r}
+head(camera_data, 8)
+```
+
+Find where the intersections that include the alameda as one of the roads
+
+```{r}
+grep("Alameda", camera_data$intersection)
+```
+
+So it appears in the 4th, 5th, and 36th `intersection` variable. `grepl()` on the other hand will look for the instances and return a vector of booleans where these values occur
+
+```{r}
+grepl("Alameda", camera_data$intersection)
+
+# count the instances using a table
+table(grepl("Alameda", camera_data$intersection))
+```
+
+In this way we can subset based on instances of variables, which is pretty powerful:
+
+```{r}
+camera_data2 <- camera_data[!grepl("Alameda", camera_data$intersection), ]
+str(camera_data2)
+```
+
+If you use `value = TRUE` in `grep()` it will return the values that these instances occur, rather than where they occur. Easier than getting the indices and then subsetting
+
+```{r}
+grep("Alameda", camera_data$intersection, value = TRUE)
+```
+
+A very useful library to keep in mind is `stringr` (or `stringi`, this one's faster). This allows you to do various string operations in a python-esque way:
+
+```{r}
+library(stringr)
+name <- "Norman Benbrahim; the most handsome of all the devils 😈" 
+nchar(name)
+substr(name, 1, 9)
+str_count(name)
+```

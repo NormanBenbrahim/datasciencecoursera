@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 # Merging Data
 
 Sometimes when you're bringing datasets into R you want to be able to merge them. Usually you'll want to match them based on an idea. This is the same idea as having a link set of tables in a database like mysql. Example data will be the peer review experiment data (conducted by Jeff Leek)

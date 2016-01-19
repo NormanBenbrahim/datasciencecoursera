@@ -1,0 +1,37 @@
+# Regular Expressions
+
+Literals are portions of strings or entire strings that match entirely. For example matching the word "booty" in the sentence "I like fat booty". The simplest patterns of regular expressions matches literals. But what if we wanted something more complicated, like sentences that end in "booty"? Regular expressions to the rescue. Some special metacharacters in regex:
+
+1. `^` represents the beginning of the line
+2. `$` represents the end of the line
+3. `[]` represents a set of characters, so for example `[Bb]` matches either capital or lowercase b's
+4. When `^` is within a bracket (`[]`), it denotes the "not operator"
+5. `.` is used to refer to any character, a sort of wildcard
+6. `|` represents the usual logical "or" but for regular expresions, and can be used consecutively.
+7. Subexpressions can be contained within parentheses "`()`" in order to combine many expresions
+8. If you want to match any of the metacharacters you need to use the escape character `\`
+9. `*` and `+` represent repetition; `*` means any number, including none, of the item and `+` means at least one of the item
+10. `{` and `}` are referred to as interval quantifiers
+11. Numbers not between square brackets (so anything between `0` and `9`) matches the number of things
+
+Something like `^[Ii] am` would match all lines that start with either `"I am"` or `"i am`. 
+
+Something like `^[0-9][a-zA-Z]` matches all letters of the alphabet, lowercase or otherwise, and any number between 0 and 9 
+
+`[^m.]$` matches anything at the end of the line EXCEPT for the letter m or periods (you see the use of the "not operator")
+
+`a.b` will match any sentence that has an a then any character then a b, so it would match the word "arboreum"
+
+Something like `boobs|booty` would match either the word boobs or booty in a line, pretty intuitive
+
+Something like `^([Bb]oobs|[Bb]ooty)` would match the word boobs or booty only at the beginning of the line
+
+If you wanted lines that end in a period, you would use `[\.]$`
+
+Someting like `(.*)` would match any character repeated any number of times between parentheses
+
+Something like `( +[^ ]+ +){1, 5}` matches something that is at least one space, followed by something that is not a space, followed by at least one space, matched between 1 and 5 times. This is equivalent to matching 1 to 5 words in a regular english sentence, **useful**!
+
+Something like `9[Bb]` matches 9 instances of B or b, something like `9,[Bb]` means at 9 instances of B or B, and something like `3,9[Bb]` means at least 3 but no more than 9 instances of B or b 
+
+The wildcard `*` is greedy, it'll prefer to match the longest string as opposed to the shortest. In other words, `^s(.*)s` matches any lines that start with an `s` and end with an `s`. For example it'll match `"sitting at starbucks"` rather than `"sitting at s"`. Turn off greediness by inserting a `?`. So in our example, we would use `^s(.*?)s` to match `"sitting at s"`.

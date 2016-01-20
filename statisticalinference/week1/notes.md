@@ -41,3 +41,13 @@ Notice the two quantities have the same denominator. Dividing $1$ by $2$ yields
 
 $\frac{P(+ | D)}{P(+ | D^c)} \cdot \frac{P(D)}{P(D^c)} = \frac{P(D | +)}{P(D^c | +)}$
 
+What this tells us is the post test odds of D (RHS) is given by the pre-test odds of D (LHS2) times the diagnostic likelyhood ratio for a positive test result (LHS1). 
+
+## Expected value
+
+Defined as $E[x] = \sum xp(x)$
+
+
+
+
+

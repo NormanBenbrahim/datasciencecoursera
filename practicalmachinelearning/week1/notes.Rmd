@@ -1,0 +1,62 @@
+---
+title: "Notes"
+output:
+  html_document:
+    keep_md: yes
+---
+
+Jeff says that sampling and probability to split test and training sets is often overlooked. This is true in the U of W specialization, as we just rely on some random sampling based on some algorithm I'm not sure about. Here's a classification example question: Can I accurately classify emails as SPAM or HAM based on some characteristics of the emails? There is a dataset found in base R called `spam`, this contains a collection of the frequencies of a certain set of words in a collection of emails.
+
+```{r}
+library(kernlab)
+data(spam)
+str(spam)
+
+# plot the density of spam vs non spam emails that contain the word your
+plot(density(spam$your[spam$type=="nonspam"]),
+     col = "blue",
+     main = "", 
+     xlab = "Frequency of the word 'your'")
+lines(density(spam$your[spam$type=="spam"]),
+      col = "red")
+```
+
+Emails that are spam have more "your" than non-spam emails. Build a predictor based on a cutoff after the large blue spike. This is pretty naive, but let's go ahead and do that
+
+```{r}
+prediction <- ifelse(spam$your>0.5, "spam", "nonspam")
+table(prediction, spam$type)/length(spam$type)
+```
+
+We see the accuracy is 45% + 29% = 74%. 
+
+#### The question you are asking is the most important part of a machine learning sequence
+
+You need to have a good concrete question in order to obtain a reasonable answer. The second most important thing is the quality of data. In general, garbage in = garbage out. The data you have is very very important. The "best" machine learning method will be interpretable, simple, accurate, fast and scalable if you want it to be useful in the real world. 
+
+## In sample error vs out of sample error
+
+In sample error is the error rate you get on the same data set you used to build your predictor error. This is also called resubstitution error. 
+
+Out of sample error is the error rate you get on your new dataset. This is also called ** generalization error **. Generally speaking, in sample error rate is smaller than your generalization error, due to overfitting (this depends on model complexity too). 
+
+## Types of errors
+
+When you're trying to predict in terms of a binary variable (two classes), the types of errors are
+
+1. True positive; correctly identified
+2. False positive; incorrectly identified
+3. True negative; correctly rejected
+3. False negative; incorectly rejected
+
+## ROC curves
+
+Stands for receiver operating characteristic. This is a plot of 1 - specificity, which is a measure of the false positives, and the sensitivity on the y axis, which is a measure of true positives. This curve tells you about the tradeoffs of both. You usually plot this and calculate the area under the curve (AUC). AUC = 0.5 is equivalent to random guessing. AUC above 0.8 is generally considered good.
+
+## Cross validation
+
+In k-fold cross validation, larger k -> less bias, more variance. Smaller k -> more bias, less variance.
+
+## Choosing data
+
+Like predicts like. Pick data as closely related to the data as possible. Unrelated data is the most common mistake, so make sure you know **where the data comes from and what it's describing (what the features are)***

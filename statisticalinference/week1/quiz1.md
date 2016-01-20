@@ -1,0 +1,112 @@
+# Quiz 1
+
+## Question 1 
+
+
+```r
+x <- c(0.18, -1.54, 0.42, 0.95)
+w <- c(2, 1, 3, 1)
+weighted.mean(x, w)
+```
+
+```
+## [1] 0.1471429
+```
+
+## Question 2 
+
+
+```r
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+
+lm(y ~ x - 1)$coefficients[[1]]
+```
+
+```
+## [1] 0.8262517
+```
+
+## Question 3 
+
+
+```r
+data("mtcars")
+
+# wt is weight, in tons
+lm(mpg ~ wt, mtcars)$coefficients[[2]]
+```
+
+```
+## [1] -5.344472
+```
+
+## Question 4 
+
+We have $Y$ and $X$. Given $\sigma(X) = 0.5 \cdot \sigma{Y}$, and $Corr(X, Y) = 0.5$. The value of the slope is given by 
+
+$w_1 = Cor(Y, X) \cdot \frac{\sigma(y)}{\sigma(x)}$
+
+So $w_1 = 0.5 * \frac{1}{0.5} = 1$
+
+## Question 5 
+
+$Cor(X, Y) = 0.4$ and both were normalized. When you normalize the variables to 0 mean and standard deviation of 1, the slope of the regression would be equivalent to the correlation, so you expect a score of $0.4*1.5 = 0.6$
+
+## Question 6
+
+```r
+x <- c(8.58, 10.46, 9.01, 9.64, 8.86)
+y <- (x - mean(x))/sd(x)
+y[1]
+```
+
+```
+## [1] -0.9718658
+```
+
+# Question 7
+
+
+```r
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+
+lm(y ~ x)$coefficients[[1]]
+```
+
+```
+## [1] 1.567461
+```
+
+## Question 8
+
+Must be 0
+
+## Question 9 
+
+The mean
+
+```r
+mean(c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42))
+```
+
+```
+## [1] 0.573
+```
+
+## Question 10
+
+The slope of a fit of $X$ to $Y$ is given by 
+
+$\beta_1 = Cor(Y, X) \cdot \frac{\sigma(y)}{\sigma(x)}$
+
+If you fit $Y$ to $X$ you get
+
+$\gamma_1 = Cor(X, Y) \cdot \frac{\sigma(x)}{\sigma(y)}$
+
+Given that $Cor(X, Y) = Cor(Y, X)$, then 
+
+$\frac{\beta_1}{\gamma_1} = \frac{2\sigma(y)\sigma(y)}{2\sigma(x)\sigma(x)} = \frac{\sigma^2(y)}{\sigma^2(x)}$
+
+

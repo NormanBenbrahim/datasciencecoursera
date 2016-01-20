@@ -52,12 +52,3 @@ What this tells us is the post test odds of D (RHS) is given by the pre-test odd
 ## Expected value
 
 Defined as $E[x] = \sum xp(x)$
-
-ex <- function (x, px) {
-tot <- 0
-for (i=1:length(x)) { 
-tot <- tot + x[i]*px[i] }
-tot}
-
-
-

@@ -1,0 +1,13 @@
+---
+title: "Clustering Case Study"
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+Remember the key in exploratory data analysis, you ahve to have a sense for what you're looking for what are the key priorities you set in your dataset. The basic idea is to produce a rough cut of the analysis. It won't have the bells and whistles, but it'll have to key ideas, it helps you rule out certain questions and pushes you into the right direction. 
+
+# Understanding Human Activity with Smart Phones
+
+Read the pdf file contained in this folder, as getting the data and subsetting is a hassle. The steps he uses to go through are indicative of things you might do as you explore your data (sequentially)

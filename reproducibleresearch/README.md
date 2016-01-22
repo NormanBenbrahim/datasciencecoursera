@@ -1,3 +1,3 @@
 # Reproducible Research
 
-## Offered through Coursera, by Johns Hopkins University
+### Offered through Coursera, by Johns Hopkins University

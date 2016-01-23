@@ -7,8 +7,8 @@ if (!exists("pm25") | !exists("classif")) {
 }
 
 # extract the names
-coal_levels <- levels(classif$EI.Sector)
-coal_names <- coal_levels[grep("Coal", coal_levels, ignore.case = T)]
+all_levels <- levels(classif$EI.Sector)
+coal_names <- all_levels[grep("Coal", all_levels, ignore.case = T)]
 
 # subset out only coal values
 coal_subset <- subset(classif, EI.Sector %in% coal_names)

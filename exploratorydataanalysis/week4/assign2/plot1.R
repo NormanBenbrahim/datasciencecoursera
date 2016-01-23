@@ -6,7 +6,7 @@ if (!exists("pm25")) {
 }
 
 # get statistic
-sums <- summarise(group_by(pm25, year), sum(Emissions))
+sums <- summarise(group_by(pm25, year), sum(Emissions, na.rm = T))
 
 # plot and save it 
 png("./plot1.png")

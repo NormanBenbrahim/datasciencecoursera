@@ -7,7 +7,7 @@ if (!exists("pm25")) {
 
 # subset it 
 baltimore <- filter(pm25, fips == "24510")
-sums <- summarise(group_by(baltimore, year), sum(Emissions))
+sums <- summarise(group_by(baltimore, year), sum(Emissions, na.rm = T))
 
 # plot and save it 
 png("./plot2.png")

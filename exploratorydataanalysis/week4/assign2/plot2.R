@@ -5,13 +5,17 @@ if (!exists("pm25")) {
     source("load_data.R")
 }
 
+# subset it 
 baltimore <- filter(pm25, fips == "24510")
-sums2 <- summarise(group_by(baltimore, year), sum(Emissions))
+sums <- summarise(group_by(baltimore, year), sum(Emissions))
+
+# plot and save it 
 png("./plot2.png")
-barplot(sums2$`sum(Emissions)`,
-        names = sums$year,
-        col = c("darkgreen", "blue", "red", "purple"),
-        ylab = "Total Emissions",
-        xlab = "Year",
-        main = "Total Emissions for Baltimore, Maryland")
+plot(sums, 
+     col = "purple",
+     lwd = 2,
+     type = "l",
+     ylab = "Total Emissions",
+     xlab = "Year",
+     main = "Total Emissions for the Baltimore, MD")
 dev.off()

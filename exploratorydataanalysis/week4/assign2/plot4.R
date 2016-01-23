@@ -26,7 +26,7 @@ sums <- summarise(group_by(pm25_subset, year), sum(Emissions, na.rm = T))
 names(sums) <- c("Year", "Emissions")
 
 # plot the result
-png("./plot5.png")
+png("./plot4.png")
 qplot(Year, Emissions, data = sums, geom = "line") + 
     ggtitle("Total Vehicle Related Emissions in Baltimore")
 dev.off()

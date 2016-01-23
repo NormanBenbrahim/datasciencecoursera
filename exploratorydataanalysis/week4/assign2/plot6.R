@@ -20,10 +20,9 @@ scc <- motor_subset$SCC
 pm25_baltimore <- filter(pm25, pm25$SCC %in% as.character(scc), fips == "24510")
 pm25_la <- filter(pm25, pm25$SCC %in% as.character(scc), fips == "06037")
 
-# change fips to city name
+# change fips to city name and stack together
 pm25_baltimore$fips <- as.factor("Baltimore")
 pm25_la$fips <- as.factor("LA")
-
 pm25_subset <- rbind(pm25_baltimore, pm25_la)
 
 # sum the year values by city and fips

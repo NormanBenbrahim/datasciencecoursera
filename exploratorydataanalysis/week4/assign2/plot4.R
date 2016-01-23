@@ -28,7 +28,7 @@ names(sums) <- c("Year", "Emissions")
 # plot the result
 png("./plot4.png")
 qplot(Year, Emissions, data = sums, geom = "line") + 
-    ggtitle("Total Vehicle Related Emissions in Baltimore")
+    ggtitle("Total Coal Related Emissions in the US")
 dev.off()
 
 

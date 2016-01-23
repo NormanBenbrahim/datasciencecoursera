@@ -35,5 +35,22 @@ barplot(sums$`sum(Emissions)`,
         names = sums$year,
         col = c("darkgreen", "blue", "red", "purple"),
         ylab = "Total Emissions",
-        xlab = "Year")
+        xlab = "Year",
+        main = "Total Emissions For the US")
+dev.off()
+
+
+# Q2. Have total emissions from PM2.5 decreased in the Baltimore City, Maryland 
+# (𝚏𝚒𝚙𝚜 == "𝟸𝟺𝟻𝟷𝟶") from 1999 to 2008? Use the base plotting system 
+# to make a plot answering this question.
+
+sset <- filter(pm25, fips == "24510")
+sums2 <- summarise(group_by(sset, year), sum(Emissions))
+png("plot2.png")
+barplot(sums2$`sum(Emissions)`,
+        names = sums$year,
+        col = c("darkgreen", "blue", "red", "purple"),
+        ylab = "Total Emissions",
+        xlab = "Year",
+        main = "Total Emissions for Baltimore, Maryland")
 dev.off()

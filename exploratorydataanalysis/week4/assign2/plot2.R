@@ -17,5 +17,5 @@ plot(sums,
      type = "l",
      ylab = "Total Emissions",
      xlab = "Year",
-     main = "Total Emissions for the Baltimore, MD")
+     main = "Total Emissions for Baltimore, MD")
 dev.off()

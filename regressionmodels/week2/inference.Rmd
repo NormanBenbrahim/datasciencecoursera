@@ -1,0 +1,74 @@
+---
+title: 'Inference in Regression'
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+In statistical inference, we must account for the uncertainty in our estimates in a principled way. Hypothesis tests and confidence intervals are among the most common forms of statistical inference. 
+
+Statistics of the form $\frac{\hat{\theta} - \theta}{\hat{\sigma}_{\hat{\theta}}}$ often have the following properties:
+
+1. Normally distributed and has a finite sample Student's t-distribution if the estimated variance is replaced with a sample estimate (under normality assumptions)
+
+2. Can be used to test $H_0: \: \theta = \theta_0$ versus $H_a: \: \theta \neq \theta_0$
+
+3. Can be used to create a confidence interval for $\theta$ via $\hat{\theta} \pm Q_{1-\alpha/2}\hat{\sigma}_{\hat{\theta}}$ where $Q_{1-\alpha/2}$ is the relevant quantile from either a normal or t-distribution (for given significance level $\alpha$).
+
+**It is not mandatory for our errors to be gaussian for our statistical inferences in regression to hold**
+
+Let's evaluate the variance of our regression slope, $\sigma_{\hat{w_1}}^2$
+
+$\sigma_{\hat{w_1}}^2 = Var(\hat{w_1}) = \sigma^2/\sum_{i=1}^{n}\left(X_i - \bar{X_i} \right)^2$
+
+In practice, $\sigma$ is replaced by its sample estimate. Here's a coding example using the diamond dataset
+
+```{r, message=FALSE}
+library(UsingR); data(diamond)
+y <- diamond$price; x <- diamond$carat; n <- length(y)
+
+# estimate the parameters
+w1 <- cor(y, x)*sd(y)/sd(x)
+w0 <- mean(y) - w1*mean(x)
+
+# error estimate 
+e <- y - w0 - w1*x
+
+# sample estimate
+sigma <- sqrt(sum(e^2)/(n - 2))
+
+ssx <- sum((x - mean(x))^2)
+se_w0 <- (1/n + mean(x)^2/ssx) ^.5 * sigma 
+se_w1 <- sigma / sqrt(ssx)
+
+# create 2 t-statistics based on w1 and w0
+t_w0 <- w0 / se_w0
+t_w1 <- w1/se_w1
+
+# create 2 p values
+p_w0 <- 2*pt(abs(t_w0), df = n - 2, lower.tail = F)
+p_w1 <- 2*pt(abs(t_w1), df = n - 2, lower.tail = F)
+
+# create coefficient table
+coefTable <- rbind(c(w0, se_w0, t_w0, p_w0), c(w1, se_w1, t_w1, p_w1))
+colnames(coefTable) <- c("Estimate", "Std. Error", "t value", "P(>|t|)")
+rownames(coefTable) <- c("(Intercept)", "x")
+coefTable
+
+# compare with the easy way
+fit <- lm(y ~ x)
+summary(fit)$coefficients
+```
+
+Heres how you get a confidence interval.
+
+```{r}
+sumCoeff <- summary(fit)$coefficients
+
+# confidence interval for intercept
+sumCoeff[1, 1] + c(-1, 1)*qt(.975, df = fit$df)*sumCoeff[1, 2]
+
+# confidence interval for slope
+sumCoeff[2, 1] + c(-1, 1)*qt(.975, df = fit$df)*sumCoeff[2, 2]
+``` 

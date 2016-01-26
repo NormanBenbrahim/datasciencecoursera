@@ -1,0 +1,86 @@
+---
+title: 'Residuals'
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+We will make use of the diamonds dataset, which gives the price of diamonds (singapore dollars) per unit mass (carats, defined as 0.2 g)
+
+```{r, message=FALSE}
+library(UsingR); data(diamond)
+```
+
+```{r}
+# lin model fit
+fit <- lm(price ~ carat, data = diamond)
+coefficients(fit)
+```
+
+Here's a nice plot of the data
+
+```{r}
+library(ggplot2)
+
+ggplot(diamond, aes(x = carat, y = price)) +
+    xlab("Mass (carats)") + ylab("Price (SIN $)") + 
+    geom_point(size = 7, color = "black", alpha = 0.5) + 
+    geom_point(size = 4, color = "blue", alpha = 0.2) + 
+    geom_smooth(method = "lm", color = "red")
+```
+
+Recall residuals are just the distance between the data (price in this case) and the estimated data (the line Y_i) 
+
+```{r}
+e <- resid(fit) # easy way
+```
+
+It may be a good idea to plot the residuals vs the predictor, to see if there is variability in it. If the plot appears random, that means that the model chosen predicts the value well. If there is a more complex pattern such as sinusoidal variation, you may want to consider updating your model.
+
+```{r}
+ggplot(diamond, aes(x = carat, y = e)) +
+    xlab("Mass (carats)") + ylab("Residual") + 
+    geom_point(size = 5, color = "black", alpha = 0.5) + 
+    geom_point(size = 2, color = "red", alpha = 0.2) +
+    geom_smooth(method = "lm", se = FALSE, color = "black")
+```
+
+Here is an example showing how the fit may appear to be linear, however the residual plot shows way to the contrary. We sample from the uniform distribution and add samples from the normal distribution and fit a line. They appear to be harmoniously linearly related, but plot the residuals and see otherwise:
+
+```{r}
+x <- runif(100, 0, 1)
+y <- x + rnorm(100, 0, 0.001*x)
+ggplot(data.frame(x = x, y = y), aes(x = x, y = y)) +
+    geom_point(size = 7 , color = "black", alpha = 0.5) + 
+    geom_point(size = 4, color = "blue", alpha = 0.2) + 
+    geom_smooth(method = "lm", color = "red")
+```
+
+Now the residuals:
+
+```{r}
+e <- resid(lm(y ~ x))
+ggplot(data.frame(x = x, y = e), aes(x = x, y = e)) +
+    geom_point(size = 5 , color = "black", alpha = 0.5) + 
+    geom_point(size = 2, color = "blue", alpha = 0.2) + 
+    geom_smooth(method = "lm", color = "black", se = F)
+```
+
+
+# Estimating residual variation
+
+This is estimated by `sigma` in your `fit` variable
+
+```{r}
+fit$sigma
+```
+
+# R Squared
+
+($R^2$) This is defined as the percentage of variation explained by the regression model. It is also defined as the sample correlation squared. It can be a misleading summary of model fit, as deleting data can inflate $R^2$, type `example(anscombe)` and see an interesting example of these misleading behaviors.
+
+```{r}
+example(anscombe)
+```
+

@@ -1,12 +1,15 @@
 # folders #
 ###############
+gettingandcleaningdata/week4/GetCleanData-CourseProject/
 rprogramming/assign1/specdata
 rprogramming/assign3/rprog-data-ProgAssignment3-data/hospital-data.csv
 rprogramming/assign3/rprog-data-ProgAssignment3-data/outcome-of-care-measures.csv
 exploratorydataanalysis/week1/assign1/household_power_consumption.txt
 rprogramming/assign3/rprog-data-ProgAssignment3-data/
 reproducibleresearch/RepData_PeerAssessment1/
-/Users/nbenbrahim/Documents/datasciencecoursera/exploratorydataanalysis/week4/assign2/*.rds
+reproducibleresearch/week4/assign2/rsconnect/
+reproducibleresearch/week4/assign2/solution_cache/
+reproducibleresearch/week4/assign2/solution_files/
 
 # OS generated files #
 ######################

@@ -1,0 +1,52 @@
+---
+title: 'Plotting Predictors'
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+# Example with wages data
+
+```{r, message=FALSE}
+library(ISLR); library(ggplot2); library(caret)
+data(Wage)
+summary(Wage)
+```
+
+Now let's train and test the data. 
+
+```{r}
+inTrain <- createDataPartition(y=Wage$wage, p=0.7, list = FALSE)
+training <- Wage[inTrain, ]
+testing <- Wage[-inTrain, ]
+
+# feature plot
+featurePlot(x = training[, c("age", "education", "jobclass")],
+            y = training$wage,
+            plot = "pairs")
+
+# simple ggplot plot of age vs wage, coloring the job class (info vs industrial)
+qplot(age, wage, colour = jobclass, data = training) 
+
+# add regression smoothers, this time using as color the education group
+qplot(age, wage, colour = education, data = training) +
+    geom_smooth(method = "lm")
+```
+
+You can also make different factors based on quantiles of a continuous variable. Suppose you wanted to examine certain groups of wages. You can use the `cut2` function to do so:
+
+```{r}
+library(Hmisc)
+cutWage <- cut2(training$wage, g=3)
+table(cutWage)
+
+# plot different wage groups
+qplot(cutWage, age, data = training, fill = cutWage, geom="boxplot")
+```
+
+Density plots are also very useful, here we examine the density of wages as education levels change
+
+```{r}
+qplot(wage, colour = education, data = training, geom = "density")
+```

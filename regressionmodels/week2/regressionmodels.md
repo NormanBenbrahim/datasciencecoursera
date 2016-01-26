@@ -1,0 +1,10 @@
+# Regression Models
+
+Remember we were trying to guess what the parameters $w_1$ and $w_2$ are for the predictor $X$. Generally we will be developping a probabilistic model, which means we are adding noise to the predicted value $Y$. Let's assume the noise is Gaussian $N(\mu, \sigma^2)$. This has properties such that 
+
+$E[Y_i | X_i = x_i] = \mu_i = w_0 + w_1x_i$
+
+$Var(Y_i | X_i = x_i) = \sigma^2$ 
+
+$E[Y_i | X_i = 0] = \mu_i = w_0 + w_1\cdot 0 = w_0$
+

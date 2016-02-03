@@ -1,0 +1,46 @@
+# P Values
+
+This is the most common measure of statistical significance. 
+
+Idea: suppose nothing is going on - how unusual is it to see the estimate we got?
+
+Approach: 
+
+1. Define the hypothetical distribution of a data summary (statistic) when "nothing is going on" (null)
+2. Calculate the summary/statistic with the data we have (test statistic)
+3. Compare what we calculated to our hypothetical distribution and see if the value is "extreme" (p-value)
+
+The p value is the probability under the null hypothesis of obtaining evidence as extreme or more extreme than that obtained. If p value is small, either the null hypothesis is true and we have observed a rare event, or the null is false.
+
+**Example** Suppose that you get a t statistic of 2.5 for 15 df testing $H_0: \: \mu=\mu_0$ versus $H_a: \: \mu>\mu_0$. What's the probability of getting a t statistic as large as 2.5? Restated, 
+
+$P(|t|\geq 2.5)$?
+
+In `R`,
+
+```r
+pt(2.5, 15, lower.tail = F)
+```
+
+```
+## [1] 0.0122529
+```
+
+If the p value is less than $\alpha$, reject the null. For the two sided test, double the smaller of the two one sided hypothesis test p values
+
+# Poisson Example
+
+Suppose that a hospital has an infection rate of 10 infections per 100 person/days at risk (rate of 0.1) during the last monitoring period. Assume infection rate of 0.05 is an important benchmark. Given the model, could the observed rate being larger than 0.05 be attributed to chance?
+
+Under $H_0: \: \lambda = 0.05$ so that $n\cdot p = \lambda_0 \cdot 100 = 5$. Consider $H_a: \: \lambda>0.05$
+
+If in fact the rate is 0.05 having been monitored for 100 person per days at risk, what's the probability of obtaining 10 or more infections.
+
+
+```r
+ppois(9, 5, lower.tail = F)
+```
+
+```
+## [1] 0.03182806
+```

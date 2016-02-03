@@ -1,0 +1,28 @@
+---
+title: 'Principal Component Analysis'
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+Let's begin examining this in our spam/ham example
+
+```{r}
+library(caret)
+library(kernlab)
+data(spam)
+
+inTrain <- createDataPartition(y = spam$type, p = 0.75, list = F)
+     
+training <- spam[inTrain, ]
+testing <- spam[-inTrain, ]
+
+M <- abs(cor(training[, -58]))
+diag(M) <- 0 # remove things correlated with themselves
+which(M>0.8, arr.ind = T)
+```
+
+We might not need every predictor. Some might be way too correlated. We should pick a combination that reduces noise and compress the data. So the goal is to **Find a new set of multivariate variables that are uncorrelated and explain as much variance as possible**. 
+
+In caret you can use the `preProcess` function. 

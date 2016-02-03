@@ -1,0 +1,65 @@
+---
+title: "Predicting With Trees"
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+The basic idea is that you have a bunch of variables to predict an outcome, you iteratively split the variables into different groups. As you split into groups you may want to evaluate the "homogeneity" within each group, and subsequently split again if necessary. 
+
+Pros:
+
+* Easy to Interpret
+* Better performance in nonlinear settings
+
+Cons:
+
+* Without cross validation this can lead to overfitting
+* Harder to estimate uncertainty
+* Results may be variable
+
+In `R` you do this with the `caret` package. Let's use the iris dataset as an example:
+
+```{r, message=F}
+data(iris)
+library(ggplot2)
+library(caret)
+
+names(iris)
+
+# how many different kinds of species of iris flowers:
+table(iris$Species)
+
+# create train and test set
+inTrain <- createDataPartition(y = iris$Species, p = 0.7, list = F)
+training <- iris[inTrain, ]
+testing <- iris[-inTrain, ]
+dim(training)
+dim(testing)
+
+# plot petal width vs sepal with for different species 
+qplot(Petal.Width, Sepal.Width, colour = Species, data = iris)
+```
+
+We see in this dataset there are 3 distinct groups, which is a relatively easy classification problem. However, a linear model would have a hard time discriminating between these groups. Which is why we fit a prediction tree model
+
+```{r}
+library(rpart)
+modelFit <- train(Species ~ ., method = "rpart", data = training)
+print(modelFit$finalModel)
+```
+
+Can also plot the classification tree
+
+```{r}
+plot(modelFit$finalModel, uniform = T, main = "Classification Tree")
+text(modelFit$finalModel, use.n = T, all = T, cex = .6)
+```
+
+Or with `rattle` for a prettier version of the plot
+
+```{r}
+library(rattle)
+fancyRpartPlot(modelFit$finalModel)
+```

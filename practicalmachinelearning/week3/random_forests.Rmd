@@ -1,0 +1,46 @@
+---
+title: "Random Forests"
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+----
+
+Similar to bagging, the difference is at each split, bootstrap the variables. So we end up growing a large number of trees and vote on them. It is very accurate, however it is slow, hard to interpret and suffers from overfitting. Heres an example using the iris dataset as usual
+
+```{r, message= F}
+data(iris)
+library(caret)
+library(ggplot2)
+inTrain <- createDataPartition(y = iris$Species,
+                               p = .7,
+                               list = F)
+# split
+training <- iris[inTrain, ]
+testing <- iris[-inTrain, ]
+
+# random forests
+modfit <- train(Species ~ ., data = training, method = "rf", prox = T)
+
+# look at specific tree, namely the second one
+getTree(modfit$finalModel, k = 2)
+
+# get the "centroids" in your data by using the classCenter function with your model
+irisP <- classCenter(training[, c(3,4)], training$Species, modfit$finalModel$proximity)
+irisP <- as.data.frame(irisP)
+irisP$Species <- rownames(irisP)
+
+qplot(Petal.Width, Petal.Length, col = Species, data = training) + 
+    geom_point(aes(x = Petal.Width, y = Petal.Length, col = Species), size = 10, shape = 4, data=irisP)
+```
+
+You can then use the model to predict in the testing data
+```{r}
+pred <- predict(modfit, testing)
+# create a new variable to see which are correct
+testing$predright <- pred == testing$Species
+table(pred, testing$Species)
+
+# plot and see which you missed
+qplot(Petal.Width, Petal.Length, col = predright, data = testing)
+```

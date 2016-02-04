@@ -1,0 +1,37 @@
+---
+title: "Multivariable regression"
+output:
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+The problem setting is simple. Given predictors/features $X_1, X_2, ..., X_n$, we want to build a predictive model $Y$ such that 
+
+#### $Y = \sum_{i=1}^n w_iX_i$
+
+where $w_i$ (also called $\beta_i$) are the weights associated with each predictor. Each weight can be interpreted as the incremental change in one predictor if we hold the others constant.  Let's do a data example
+
+```{r}
+require(datasets)
+data(swiss)
+str(swiss)
+require(GGally) # even more complicated ggplots 
+require(ggplot2)
+
+# this is a cool plot
+g <- ggpairs(swiss)
+g
+
+# fit a full linear model of fertility rate to all other factors
+model <- lm(Fertility ~ ., data = swiss)
+```
+
+Notice agriculture is negative. This is strange since you would expect more food -> more fertile humans. 
+```{r}
+summary(model)
+```
+
+Notice in the summary calculates our t statistics and p values this tells us that this is a statistically significant factor... So what this is saying is our model estimates an expected 0.17 decrease in standardized fertility for every 1% increase in percentage of males involved in agriculture in holding the other factors constant. In the end, regression is a tool that forces you to think about which variables you are including, especially if you haven't protected yourself by randomizing!
+
+ 

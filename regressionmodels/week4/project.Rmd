@@ -1,0 +1,81 @@
+---
+title: "Course Project"
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
+  word_document: default
+---
+
+# The Problem Setting
+
+You work for Motor Trend, a magazine about the automobile industry. Looking at a data set of a collection of cars, they are interested in exploring the relationship between a set of variables and miles per gallon (MPG) (outcome). They are particularly interested in the following two questions:
+
+* Is an automatic or manual transmission better for MPG?
+* Quantify the MPG difference between automatic and manual transmissions
+
+# The Data
+
+First we load up the data, we've seen this data in a number of examples in lectures as well as quizzes. It has 11 variables with 32 observations of different car models. 
+
+```{r, cache = TRUE, message = FALSE}
+data(mtcars)
+mtcars$vs <- as.factor(mtcars$vs); mtcars$am <- as.factor(mtcars$am) # should be categorical
+```
+
+Now let's make a plot the first question "Is an automatic or manual transmission better for MPG?":
+
+```{r, message = FALSE}
+library(ggplot2)
+g <- ggplot(mtcars, aes(am, mpg))
+g <- g + geom_boxplot(aes(fill=am))
+g
+```
+
+Automatic is labeled as 1 and non automatic is labeled as 0. However there are a total of 10 predictors in this dataset, therefore there may be some interaction between them. Let's do an analysis of variance on all the predictors to see which play a bigger role in the determination of mpg:
+
+```{r}
+summary(aov(mpg ~ ., data = mtcars))
+```
+
+We can remove those models whose p-value is greater than 0.05. We do this in an automated way by doing:
+
+```{r}
+s <- summary(aov(mpg ~ ., data = mtcars))
+# get the actual array info out of summary
+s <- s[[1]]
+
+# remove the row of residuals for now
+idx <- s$`Pr(>F)`<0.05
+rownames(s[idx, ])
+```
+
+So now let's update the model accordingly
+
+```{r}
+fit2 <- lm(mpg ~ cyl + disp + wt + drat + am, data = mtcars)
+summary(fit2)
+```
+
+Again the same thing, refine the model
+
+```{r}
+fit3 <- lm(mpg ~ cyl + disp + wt + am, data = mtcars)
+summary(fit3)
+```
+
+Now the last variable we remove is `disp`. Our final model is then
+
+```{r}
+final_fit <- lm(mpg ~ cyl + wt + am, data = mtcars)
+summary(final_fit)
+```
+
+This says that we cannot reject the null hypothesis that the coefficient of am is 0. Let's do some diagnostic plots before making any conclusions, showing the Q-Q plot and residual plot among others:
+
+```{r}
+par(mfrow = c(2, 2))
+plot(final_fit)
+```
+
+There is no real pattern in the residual plot which is very relieving. The Q-Q plot tells us that our assumption of normality is not violated. There is a rather large difference between MPG for automatic and manual transmissions. All in all, manual transmissions will get you more miles on the gallon.
